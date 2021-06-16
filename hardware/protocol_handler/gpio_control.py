@@ -1,4 +1,5 @@
 from redpitaya.overlay.mercury import mercury as FPGA
+from ..fpga_handler import overlay
 import time
 GPIO = FPGA.gpio
 
