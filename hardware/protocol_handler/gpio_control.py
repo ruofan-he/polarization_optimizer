@@ -83,7 +83,7 @@ class Pin_Handler:
         time.sleep(0.01)
         self.CS.write(True)
     
-pin_handler = Pin_Handler
+pin_handler = Pin_Handler()
 
 def write_channel_integer(channel, integer):
     pin_handler.set_address(channel)
