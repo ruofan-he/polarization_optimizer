@@ -13,13 +13,14 @@ osc_handler = Osc_Handler()
 
 def read_osc_voltage(channel):
     osc = osc_handler.osc[channel]
+    N = 100
     osc.decimation = 1
     osc.trigger_pre  = 0
-    osc.trigger_post = 1
+    osc.trigger_post = N
     osc.trig_src = 0
     osc.reset()
     osc.start()
     osc.trigger()
     while (osc.status_run()): pass
-    data = osc.data(1)
-    return data
+    data = osc.data(N)
+    return data.mean()
