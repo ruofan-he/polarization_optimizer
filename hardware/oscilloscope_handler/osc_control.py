@@ -4,7 +4,7 @@ is_HV = False
 
 class Osc_Handler:
     def __init__(self):
-        self.osc = is_HV [
+        self.osc = [
             overlay.osc(0,20.0 if is_HV else 1.0),
             overlay.osc(1,20.0 if is_HV else 1.0)
             ]
