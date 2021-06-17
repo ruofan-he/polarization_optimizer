@@ -56,7 +56,7 @@ class Pin_Handler:
         self.RST.write(True)
         self.set_address(0)
         self.set_data(0)
-        self.write()
+        self.write_trigger()
 
         self.reset()
 
