@@ -1,1 +1,2 @@
 from .gpio_control import write_channel_integer
+from .analog_control import write_channel_volt
