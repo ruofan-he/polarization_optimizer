@@ -12,7 +12,7 @@ class Random_Walk_Handler:
 
     def candidate(self):
         mean = self.state_vector
-        cov = self.initial_sigma * self.alpha * self.delta * np.eye(3)
+        cov = self.initial_sigma * self.alpha * np.abs(self.delta) * np.eye(3)
         candidate = np.random.multivariate_normal(mean, cov, size=1)[0]
         return candidate        
 
@@ -25,8 +25,10 @@ class Random_Walk_Handler:
             write_channel_volt(i, v)
         
         new_value = read_osc_voltage()
-        self.delta = abs(new_value - self.former_voltage)
+        self.delta = new_value - self.former_voltage
         self.former_voltage = new_value
+        if self.delta > 0:
+            self.state_vector = candidate
 
         return
 
