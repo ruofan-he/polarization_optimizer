@@ -9,6 +9,8 @@ class Random_Walk_Handler:
         self.alpha = 0.1
         self.former_voltage = 0.0 #とする
         self.delta = 0.1 #とする
+        self.osc_channel = 0
+        
 
     def candidate(self):
         mean = self.state_vector
@@ -24,7 +26,7 @@ class Random_Walk_Handler:
         for i, v in enumerate(candidate):
             write_channel_volt(i, v)
         
-        new_value = read_osc_voltage()
+        new_value = read_osc_voltage(self.osc_channel)
         self.delta = new_value - self.former_voltage
         self.former_voltage = new_value
         if self.delta > 0:
