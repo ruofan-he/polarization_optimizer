@@ -21,7 +21,7 @@ class Random_Walk_Handler:
     def step(self):
         candidate = self.candidate()
         candidate = np.max(np.vstack([candidate, np.ones(3)*0]), axis = 0)
-        candidate = np.max(np.vstack([candidate, np.ones(3)*1.8]), axis = 0)
+        candidate = np.min(np.vstack([candidate, np.ones(3)*1.8]), axis = 0)
         
         for i, v in enumerate(candidate):
             write_channel_volt(i, v)
