@@ -21,11 +21,10 @@ class Random_Walk_Handler:
 
     def step(self):
         new_value = read_osc_voltage(self.osc_channel)
-        delta = new_value - self.former_voltage
+        self.delta = new_value - self.former_voltage
+        self.former_voltage = new_value
         if delta > 0:
             self.state_vector = self.former_candidate if self.former_candidate is not None else self.state_vector
-            self.delta = delta
-            self.former_voltage = new_value
 
         candidate = self.candidate()
         candidate = np.max(np.vstack([candidate, np.ones(3)*0]), axis = 0)
