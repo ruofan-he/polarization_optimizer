@@ -10,6 +10,7 @@ class Random_Walk_Handler:
         self.former_voltage = 0.0 #とする
         self.delta = 0.1 #とする
         self.osc_channel = 0
+        self.former_candidate = None
         
 
     def candidate(self):
@@ -19,19 +20,21 @@ class Random_Walk_Handler:
         return candidate        
 
     def step(self):
+        new_value = read_osc_voltage(self.osc_channel)
+        delta = new_value - self.former_voltage
+        if delta > 0:
+            self.state_vector = self.former_candidate if self.former_candidate is not None else self.state_vector
+            self.delta = delta
+            self.former_voltage = new_value
+
         candidate = self.candidate()
         candidate = np.max(np.vstack([candidate, np.ones(3)*0]), axis = 0)
         candidate = np.min(np.vstack([candidate, np.ones(3)*1.8]), axis = 0)
         
         for i, v in enumerate(candidate):
             write_channel_volt(i, v)
+        self.former_candidate = candidate
         
-        new_value = read_osc_voltage(self.osc_channel)
-        self.delta = new_value - self.former_voltage
-        self.former_voltage = new_value
-        if self.delta > 0:
-            self.state_vector = candidate
-
         return
 
         
