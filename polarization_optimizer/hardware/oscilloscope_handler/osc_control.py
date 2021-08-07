@@ -11,10 +11,16 @@ class Osc_Handler:
         
 osc_handler = Osc_Handler()
 
-def read_osc_voltage(channel):
+def read_osc_voltage(channel, N = 100, decimation = 1):
+    # (averaged) single value
+    # decimation = d, then sampling rate (125/d)MHz
+    data = read_osc_voltage_series(channel, N, decimation)
+    return data.mean()
+
+def read_osc_voltage_series(channel, N, decimation = 1):
+    # decimation = d, then sampling rate (125/d)MHz
     osc = osc_handler.osc[channel]
-    N = 100
-    osc.decimation = 1
+    osc.decimation = decimation
     osc.trigger_pre  = 0
     osc.trigger_post = N
     osc.trig_src = 0
@@ -23,4 +29,4 @@ def read_osc_voltage(channel):
     osc.trigger()
     while (osc.status_run()): pass
     data = osc.data(N)
-    return data.mean()
+    return data

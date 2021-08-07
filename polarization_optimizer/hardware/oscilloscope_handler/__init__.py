@@ -1,1 +1,2 @@
 from .osc_control import read_osc_voltage
+from .osc_control import read_osc_voltage_series
