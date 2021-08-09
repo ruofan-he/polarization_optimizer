@@ -75,7 +75,7 @@ class Pin_Handler:
     def set_data(self,data):
         assert type(data) == int
         assert 0 <= data < (1<<12)
-        for i, gpio in enumerate(self.A):
+        for i, gpio in enumerate(self.D):
             bit = is_nth_bit_set(data, i)
             self.D[i].write(bit)
 
