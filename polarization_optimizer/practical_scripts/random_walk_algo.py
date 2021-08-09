@@ -35,7 +35,7 @@ class Random_Walk_Handler:
         
         for i, v in enumerate(candidate):
             write_channel_volt(i, v)
-            write_channel_integer(i, int(v*(1<<12 - 1)))
+            write_channel_integer(i, int(v*((1<<12) - 1)))
         self.former_candidate = candidate
         
         return
