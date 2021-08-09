@@ -1,12 +1,12 @@
-from ..hardware import read_osc_voltage
 from ..hardware import write_channel_volt
+from ..hardware import write_channel_integer
 from ..metric import normal_metric_factory
 import numpy as np
 
 
 class Random_Walk_Handler:
     def __init__(self):
-        self.state_vector = np.array([0.8, 0.8, 0.8], dtype = np.double)
+        self.state_vector = np.array([0.5, 0.5, 0.5], dtype = np.double)
         self.initial_sigma = 0.1
         self.alpha = 0.1
         self.former_value = 0.0 #とする
@@ -31,10 +31,11 @@ class Random_Walk_Handler:
 
         candidate = self.candidate()
         candidate = np.max(np.vstack([candidate, np.ones(3)*0]), axis = 0)
-        candidate = np.min(np.vstack([candidate, np.ones(3)*1.8]), axis = 0)
+        candidate = np.min(np.vstack([candidate, np.ones(3)*1]), axis = 0)
         
         for i, v in enumerate(candidate):
             write_channel_volt(i, v)
+            write_channel_integer(i, int(v*(1<<12 - 1)))
         self.former_candidate = candidate
         
         return

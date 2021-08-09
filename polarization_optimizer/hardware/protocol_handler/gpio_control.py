@@ -11,7 +11,7 @@ def is_nth_bit_set(num: int, n: int):
 class Pin_Assign:
     def __init__(self):
         self.CS  = ('p',0)
-        self.RST = ('n',0)
+        self.RW  = ('n',0)
         self.A0  = ('p',1)
         self.A1  = ('n',1)
         self.D1  = ('p',2)
@@ -31,8 +31,8 @@ pin_assign = Pin_Assign()
 
 class Pin_Handler:
     def __init__(self):
-        self.CS = GPIO(*pin_assign.CS,'out')
-        self.RST = GPIO(*pin_assign.RST,'out')
+        self.CS  = GPIO(*pin_assign.CS,'out')
+        self.RW  = GPIO(*pin_assign.RW,'out')
         self.A = [
             GPIO(*pin_assign.A0,'out'),
             GPIO(*pin_assign.A1,'out')
@@ -53,17 +53,17 @@ class Pin_Handler:
         ]
 
         self.CS.write(True)
-        self.RST.write(True)
-        self.set_address(0)
-        self.set_data(0)
-        self.write_trigger()
+        self.RW.write(True)
 
         self.reset()
 
     def reset(self):
-        self.RST.write(False)
-        time.sleep(0.01)
-        self.RST.write(True)
+        self.set_data(0)
+        for i in range(4):
+            self.set_address(i)
+            self.write_trigger()
+
+    
     
     def set_address(self, channel):
         assert type(channel) == int
@@ -80,9 +80,15 @@ class Pin_Handler:
             self.D[i].write(bit)
 
     def write_trigger(self):
+        self.RW.write(False)
+        time.sleep(0.001)
         self.CS.write(False)
-        time.sleep(0.01)
+        time.sleep(0.001)
         self.CS.write(True)
+        time.sleep(0.001)
+        self.RW.write(True)
+
+        
     
 pin_handler = Pin_Handler()
 
