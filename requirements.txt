@@ -1,0 +1,2 @@
+Click==7.0
+redpitaya==0.98
