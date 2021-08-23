@@ -17,10 +17,19 @@ def visibility_metric_factory(channel, ground_level = 0):
         return visibility
     return func
 
-def power_ratio_metric_factory(channel_target, channel_sub):
+def max_min_difference_metric_factory(channel):
     def func():
-        value_target = read_osc_voltage(channel_target)
-        value_sub = read_osc_voltage(channel_sub)
+        series = read_osc_voltage_series(channel, N = 2000, decimation=31250) # 0.5s measurement
+        max_value = np.max(series)
+        min_value = np.min(series)
+        difference = max_value - min_value
+        return difference
+    return func
+
+def power_ratio_metric_factory(channel_primary, channel_secondary):
+    def func():
+        value_target = read_osc_voltage(channel_primary)
+        value_sub = read_osc_voltage(channel_secondary)
         total = value_target + value_sub
         power_ratio = value_target / total
         return power_ratio

@@ -1,8 +1,98 @@
 from . import Random_Walk_Handler
+from . import normal_metric_factory, visibility_metric_factory, max_min_difference_metric_factory, power_ratio_metric_factory
 from time import sleep
+import click
 
-if __name__ == '__main__':
-    random_walk_handler = Random_Walk_Handler()
+"""
+cmd
+|
+|-metric
+|   |
+|   |-normal
+|   |-visibility
+|   |-power_ratio
+|   |-max_min_diff
+|
+|-random_walk [normal, visibility, power_ratio, max_min_diff]
+|   
+
+"""
+
+@click.group()
+def cmd():
+    pass
+
+
+metric_group    = cmd.group('metric')(lambda: None)
+@metric_group.command('normal')
+@click.argument('-c', '--channel', type=int)
+def metric_normal(channel):
+    func = normal_metric_factory(channel)
+    for i in range(10):
+        print(func())
+        sleep(0.5)
+        
+
+@metric_group.command('visibility')
+@click.argument('-c', '--channel', type=int)
+@click.option('-g', '--ground_level', type=float)
+def metric_visibility(channel, ground_level):
+    func = visibility_metric_factory(channel, ground_level=ground_level)
+    for i in range(10):
+        print(func())
+        sleep(0.5)
+
+@metric_group.command('power_ratio')
+@click.argument('-p', '--primary', type=int)
+@click.argument('-s', '--secondary', type=int)
+def metric_power_ratio(primary, secondary):
+    func = power_ratio_metric_factory(primary, secondary)
+    for i in range(10):
+        print(func())
+        sleep(0.5)
+
+@metric_group.command('max_min_diff')
+@click.argument('-c', '--channel', type=int)
+def metric_max_min_diff(channel):
+    func = max_min_difference_metric_factory(channel)
+    for i in range(10):
+        print(func())
+        sleep(0.5)
+
+
+@cmd.command('random_walk')
+@click.argument('-m', '--method')
+@click.option('-c1', '--channel1', type=int)
+@click.option('-c2', '--channel2', type=int)
+@click.option('-g', '--ground_level', type=float)
+def random_walk(method, channel1, channel2, ground_level):
+    assert method in ['normal', 'visibility', 'power_ratio', 'max_min_diff']
+    func = None
+    if method == 'normal':
+        assert channel1 is not None
+        func = normal_metric_factory(channel1)
+    elif method == 'visibility':
+        assert channel1 is not None
+        func = visibility_metric_factory(channel1, ground_level=ground_level) if ground_level is not None\
+            else visibility_metric_factory(channel1)
+    elif method == 'power_ratio':
+        assert channel1 is not None
+        assert channel2 is not None
+        func = power_ratio_metric_factory(channel1, channel2)
+    elif method == 'max_min_diff':
+        assert channel1 is not None
+        func = max_min_difference_metric_factory(channel1)
+    else:
+        return
+    
+    random_walk_handler = Random_Walk_Handler(metric=func)
     while True:
         random_walk_handler.step()
         sleep(0.001)
+
+
+
+if __name__ == '__main__':
+    cmd()
+
+

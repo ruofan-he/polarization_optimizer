@@ -5,15 +5,14 @@ import numpy as np
 
 
 class Random_Walk_Handler:
-    def __init__(self):
+    def __init__(self, metric = normal_metric_factory(0)):
         self.state_vector = np.array([0.5, 0.5, 0.5], dtype = np.double)
         self.initial_sigma = 0.1
         self.alpha = 0.1
         self.former_value = 0.0 #とする
         self.delta = 0.1 #とする
-        self.osc_channel = 0
         self.former_candidate = None
-        self.metric = normal_metric_factory(self.osc_channel)
+        self.metric = metric
         
 
     def candidate(self):
