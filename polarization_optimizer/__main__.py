@@ -26,7 +26,7 @@ def cmd():
 
 metric_group    = cmd.group('metric')(lambda: None)
 @metric_group.command('normal')
-@click.argument('-c', '--channel', type=int)
+@click.option('-c', '--channel', type=int, default=1)
 def metric_normal(channel):
     func = normal_metric_factory(channel)
     for i in range(10):
@@ -35,8 +35,8 @@ def metric_normal(channel):
         
 
 @metric_group.command('visibility')
-@click.argument('-c', '--channel', type=int)
-@click.option('-g', '--ground_level', type=float)
+@click.option('-c', '--channel', type=int, default=1)
+@click.option('-g', '--ground_level', type=float, default=0)
 def metric_visibility(channel, ground_level):
     func = visibility_metric_factory(channel, ground_level=ground_level)
     for i in range(10):
@@ -44,8 +44,8 @@ def metric_visibility(channel, ground_level):
         sleep(0.5)
 
 @metric_group.command('power_ratio')
-@click.argument('-p', '--primary', type=int)
-@click.argument('-s', '--secondary', type=int)
+@click.option('-p', '--primary', type=int, default=1)
+@click.option('-s', '--secondary', type=int, default=2)
 def metric_power_ratio(primary, secondary):
     func = power_ratio_metric_factory(primary, secondary)
     for i in range(10):
@@ -53,7 +53,7 @@ def metric_power_ratio(primary, secondary):
         sleep(0.5)
 
 @metric_group.command('max_min_diff')
-@click.argument('-c', '--channel', type=int)
+@click.option('-ch', '--channel', type=int, default=1)
 def metric_max_min_diff(channel):
     func = max_min_difference_metric_factory(channel)
     for i in range(10):
@@ -62,11 +62,11 @@ def metric_max_min_diff(channel):
 
 
 @cmd.command('random_walk')
-@click.argument('-m', '--method')
-@click.option('-c1', '--channel1', type=int)
-@click.option('-c2', '--channel2', type=int)
-@click.option('-g', '--ground_level', type=float)
-def random_walk(method, channel1, channel2, ground_level):
+@click.argument('method')
+@click.option('-c1', '--channel1', type=int, default=1)
+@click.option('-c2', '--channel2', type=int, default=2)
+@click.option('-g', '--ground_level', type=float, default=0)
+def random_walk(method, channel1 , channel2, ground_level):
     assert method in ['normal', 'visibility', 'power_ratio', 'max_min_diff']
     func = None
     if method == 'normal':
