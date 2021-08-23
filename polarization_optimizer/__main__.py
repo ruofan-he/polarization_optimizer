@@ -1,5 +1,6 @@
 from . import Random_Walk_Handler
 from . import normal_metric_factory, visibility_metric_factory, max_min_difference_metric_factory, power_ratio_metric_factory
+from . import write_channel_integer
 from time import sleep
 import click
 
@@ -90,6 +91,16 @@ def random_walk(method, channel1, channel2, ground_level):
         random_walk_handler.step()
         sleep(0.001)
 
+@cmd.command('direct')
+def direct_write_integer():
+    while True:
+        order = input()
+        if 'exit' in order:
+            return
+        integers = list(map(int,order.split(' ')))
+        assert len(integers) == 3
+        for ch, value in enumerate(integers):
+            write_channel_integer(ch, value)
 
 
 if __name__ == '__main__':
