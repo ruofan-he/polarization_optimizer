@@ -93,7 +93,7 @@ def random_walk(method, channel1 , channel2, ground_level, interactive):
     if interactive:
         with thread_handler(random_walk_handler) as th:
             thread = th.start()
-            while True:
+            while not thread.done():
                 order = input()
                 if order == 'start':
                     th.start()
@@ -102,8 +102,8 @@ def random_walk(method, channel1 , channel2, ground_level, interactive):
                 if order == 'exit':
                     th.end()
                     break
-            th.end()
             thread.result() #waiting thread end, this is blocking
+            print(f'error: {thread.exception()}')
     else:
         while True:
             random_walk_handler.step()
@@ -130,9 +130,10 @@ class thread_handler:
     def __enter__(self):
         return self
     def __exit__(self, exc_type, exc_value, traceback):
-        print('--error---------------------')
-        print(exc_type, exc_value, traceback)
-        print('--error---------------------')
+        if exc_type is not None:
+            print('--error---------------------')
+            print(exc_type, exc_value, traceback)
+            print('--error---------------------')
         self.end()
         self.executor.shutdown(wait=False, cancel_futures=True)
     def __del__(self):
