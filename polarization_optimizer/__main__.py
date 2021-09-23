@@ -135,7 +135,8 @@ class thread_handler:
             print(exc_type, exc_value, traceback)
             print('--handler-error---------------------')
         self.thread.result() #waiting thread end, this is blocking
-        if self.thread.exception(): print(f'--in-thread-error: {self.thread.exception()}')
+        if self.thread.exception():
+            print(f'--in-thread-error: {self.thread.exception()}')
             
     def __del__(self):
         self.end()
