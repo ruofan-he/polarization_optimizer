@@ -129,7 +129,7 @@ class thread_handler:
         return self
     def __exit__(self, exc_type, exc_value, traceback):
         self.end()
-        self.executor.shutdown(wait=False, cancel_futures=True)
+        self.executor.shutdown(wait=False)#, cancel_futures=True)
         if exc_type is not None:
             print('--handler-error---------------------')
             print(exc_type, exc_value, traceback)
@@ -142,7 +142,7 @@ class thread_handler:
             print('--in-thread-error-------------------')
     def __del__(self):
         self.end()
-        self.executor.shutdown(wait=False, cancel_futures=True)
+        self.executor.shutdown(wait=False)#, cancel_futures=True)
 
 
 
