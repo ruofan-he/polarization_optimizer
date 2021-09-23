@@ -113,7 +113,7 @@ class thread_handler:
         self.random_walk_handler = random_walk_handler
         self.thread = None
         self.thread_running = False
-        self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix='threading')
+        self.executor = ThreadPoolExecutor(max_workers=1)
     def start(self):
         if not self.thread_running:
             self.thread_running = True
