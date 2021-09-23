@@ -93,7 +93,7 @@ def random_walk(method, channel1 , channel2, ground_level, interactive):
     if interactive:
         with thread_handler(random_walk_handler) as th:
             thread = th.start()
-            while not thread.done():
+            while True:
                 order = input()
                 if order == 'start':
                     th.start()
@@ -113,7 +113,7 @@ class thread_handler:
         self.random_walk_handler = random_walk_handler
         self.thread = None
         self.thread_running = False
-        self.executor = ThreadPoolExecutor(max_workers=1)
+        self.executor = ThreadPoolExecutor(max_workers=1)#, thread_name_prefix='threading')
     def start(self):
         if not self.thread_running:
             self.thread_running = True
