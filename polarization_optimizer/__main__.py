@@ -137,8 +137,9 @@ class thread_handler:
         self.thread.result() #waiting thread end, this is blocking
         error = self.thread.exception()
         if error:
-            print(f'--in-thread-error: {str(error)}')
-            
+            print('--in-thread-error-------------------')
+            print(error)
+            print('--in-thread-error-------------------')
     def __del__(self):
         self.end()
         self.executor.shutdown(wait=False, cancel_futures=True)
