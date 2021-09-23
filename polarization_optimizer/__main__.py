@@ -27,7 +27,7 @@ def cmd():
 
 metric_group    = cmd.group('metric')(lambda: None)
 @metric_group.command('normal')
-@click.option('-c', '--channel', type=int, default=1)
+@click.option('-c', '--channel', type=int, default=0)
 def metric_normal(channel):
     func = normal_metric_factory(channel)
     for i in range(10):
@@ -36,7 +36,7 @@ def metric_normal(channel):
         
 
 @metric_group.command('visibility')
-@click.option('-c', '--channel', type=int, default=1)
+@click.option('-c', '--channel', type=int, default=0)
 @click.option('-g', '--ground_level', type=float, default=0)
 def metric_visibility(channel, ground_level):
     func = visibility_metric_factory(channel, ground_level=ground_level)
@@ -45,8 +45,8 @@ def metric_visibility(channel, ground_level):
         sleep(0.5)
 
 @metric_group.command('power_ratio')
-@click.option('-p', '--primary', type=int, default=1)
-@click.option('-s', '--secondary', type=int, default=2)
+@click.option('-p', '--primary', type=int, default=0)
+@click.option('-s', '--secondary', type=int, default=1)
 def metric_power_ratio(primary, secondary):
     func = power_ratio_metric_factory(primary, secondary)
     for i in range(10):
@@ -54,7 +54,7 @@ def metric_power_ratio(primary, secondary):
         sleep(0.5)
 
 @metric_group.command('max_min_diff')
-@click.option('-ch', '--channel', type=int, default=1)
+@click.option('-ch', '--channel', type=int, default=0)
 def metric_max_min_diff(channel):
     func = max_min_difference_metric_factory(channel)
     for i in range(10):
@@ -64,8 +64,8 @@ def metric_max_min_diff(channel):
 
 @cmd.command('random_walk')
 @click.argument('method')
-@click.option('-c1', '--channel1', type=int, default=1)
-@click.option('-c2', '--channel2', type=int, default=2)
+@click.option('-c1', '--channel1', type=int, default=0)
+@click.option('-c2', '--channel2', type=int, default=1)
 @click.option('-g', '--ground_level', type=float, default=0)
 @click.option('-i','--interactive', is_flag=True, default=False)
 def random_walk(method, channel1 , channel2, ground_level, interactive):
